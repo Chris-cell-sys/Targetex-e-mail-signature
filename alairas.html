@@ -88,7 +88,7 @@
         if (data.mobile) lines.push(phoneRow("tel.jpg", "Mobile", data.mobile, false));
         if (data.office) lines.push(phoneRow("tel.jpg", "Office", data.office, false));
         lines.push(row("loc.png", link(MAP, "132–144 Fehérvári út").replace(nbsp("132–144 Fehérvári út"), "132–144&nbsp;Fehérvári&nbsp;út<br>Budapest&nbsp;1116,&nbsp;Hungary"), false));
-        lines.push(row("web.png", link("https://www.targetex.com", "www.targetex.com"), false));
+        lines.push(row("web.png", link("https://www.targetex.com/?utm_source=alairas&utm_medium=email&utm_campaign=email-alairas", "www.targetex.com"), false));
         lines.push(row("linkedin.png", link("https://hu.linkedin.com/company/targetex-ltd", "LinkedIn"), true));
         var phones = (data.mobile ? 1 : 0) + (data.office ? 1 : 0);
         var bar = 136 + phones * 16;
