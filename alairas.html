@@ -14,6 +14,8 @@
       label { display: block; font-size: 12px; margin: 0 0 12px; }
       label span { display: block; margin-bottom: 4px; }
       input { width: 100%; box-sizing: border-box; font: 14px Arial, Helvetica, sans-serif; padding: 6px 8px; border: 1px solid #ccc; }
+      label.check { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+      label.check input { width: auto; margin: 0; padding: 0; }
       .hint { font-size: 12px; color: #555; margin: 0 0 12px; }
       button { font: 14px Arial, Helvetica, sans-serif; padding: 8px 12px; background: #9a0000; color: #fff; border: 0; cursor: pointer; }
       button:disabled { background: #999; }
@@ -26,15 +28,15 @@
   <body>
     <main>
       <h1>Targetex aláírás</h1>
-      <p class="lead">Töltsd ki az adatokat. Jelöld ki a kész aláírást, másold ki, és illeszd a levelező formázott aláírásmezőjébe. Üres mobil mezőnél a Mobile sor kimarad.</p>
+      <p class="lead">Töltsd ki az adatokat. A mobil számot írd be, az office számot a pipa teszi hozzá. Jelöld ki a kész aláírást, másold ki, és illeszd a levelező formázott aláírásmezőjébe.</p>
       <div class="layout">
         <form id="fields" autocomplete="off">
           <label><span>Név</span><input id="name" name="name"></label>
           <label><span>Beosztás</span><input id="title" name="title"></label>
           <label><span>Email</span><input id="email" name="email" type="email"></label>
-          <label><span>Office telefon</span><input id="office" name="office"></label>
+          <label class="check"><input id="office" name="office" type="checkbox" checked> Office: +36 30 252 0971</label>
           <label><span>Mobil</span><input id="mobile" name="mobile"></label>
-          <p class="hint">A mobil mezőt hagyd üresen, ha csak az office szám kell.</p>
+          <p class="hint">Csak mobilhoz vedd ki az office pipát. Üres mobil mezőnél a Mobile sor kimarad.</p>
           <button type="button" id="copy">Aláírás másolása</button>
           <div id="status"></div>
         </form>
@@ -45,6 +47,7 @@
       </div>
     </main>
     <script>
+      var OFFICE = "+36 30 252 0971";
       var IMG = "https://raw.githubusercontent.com/Chris-cell-sys/Targetex-e-mail-signature/main/";
       var MAP = "https://www.google.com/maps/place/TargetEx+Biosciences+Ltd./@47.4551541,19.0402523,17z/data=!3m1!4b1!4m6!3m5!1s0x4741ddea725e421d:0xfee344ee068e07b4!8m2!3d47.4551541!4d19.0402523!16s%2Fg%2F11wqc3r8fk?entry=ttu&g_ep=EgoyMDI1MTExNy4wIKXMDSoASAFQAw%3D%3D";
 
@@ -118,7 +121,7 @@
           name: document.getElementById("name").value,
           title: document.getElementById("title").value,
           email: document.getElementById("email").value,
-          office: document.getElementById("office").value,
+          office: document.getElementById("office").checked ? OFFICE : "",
           mobile: document.getElementById("mobile").value
         };
       }
@@ -146,6 +149,7 @@
       }
 
       document.getElementById("fields").addEventListener("input", render);
+      document.getElementById("fields").addEventListener("change", render);
       window.addEventListener("resize", fitPreview);
 
       document.getElementById("copy").addEventListener("click", function () {
