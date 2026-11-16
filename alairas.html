@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="hu">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Targetex aláírás</title>
+    <style>
+      body { margin: 0; background: #f3f3f3; color: #111; font-family: Arial, Helvetica, sans-serif; }
+      main { max-width: 920px; margin: 0 auto; padding: 24px 16px 48px; }
+      h1 { font-size: 20px; margin: 0 0 8px; }
+      p.lead { margin: 0 0 20px; font-size: 14px; line-height: 1.4; color: #333; }
+      .layout { display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; width: 100%; }
+      form { width: 280px; max-width: 100%; background: #fff; padding: 16px; }
+      label { display: block; font-size: 12px; margin: 0 0 12px; }
+      label span { display: block; margin-bottom: 4px; }
+      input { width: 100%; box-sizing: border-box; font: 14px Arial, Helvetica, sans-serif; padding: 6px 8px; border: 1px solid #ccc; }
+      .hint { font-size: 12px; color: #555; margin: 0 0 12px; }
+      button { font: 14px Arial, Helvetica, sans-serif; padding: 8px 12px; background: #9a0000; color: #fff; border: 0; cursor: pointer; }
+      button:disabled { background: #999; }
+      #status { font-size: 12px; min-height: 16px; margin-top: 8px; }
+      .preview-wrap { background: #fff; padding: 16px; max-width: 100%; min-width: 0; }
+      .preview-wrap h2 { font-size: 13px; font-weight: normal; color: #555; margin: 0 0 12px; }
+      #preview-scale { overflow: hidden; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Targetex aláírás</h1>
+      <p class="lead">Töltsd ki az adatokat. Jelöld ki a kész aláírást, másold ki, és illeszd a levelező formázott aláírásmezőjébe. Üres mobil mezőnél a Mobile sor kimarad.</p>
+      <div class="layout">
+        <form id="fields" autocomplete="off">
+          <label><span>Név</span><input id="name" name="name"></label>
+          <label><span>Beosztás</span><input id="title" name="title"></label>
+          <label><span>Email</span><input id="email" name="email" type="email"></label>
+          <label><span>Office telefon</span><input id="office" name="office"></label>
+          <label><span>Mobil</span><input id="mobile" name="mobile"></label>
+          <p class="hint">A mobil mezőt hagyd üresen, ha csak az office szám kell.</p>
+          <button type="button" id="copy">Aláírás másolása</button>
+          <div id="status"></div>
+        </form>
+        <div class="preview-wrap">
+          <h2>Ezt másold ki</h2>
+          <div id="preview-scale"><div id="preview"></div></div>
+        </div>
+      </div>
+    </main>
+    <script>
+      var IMG = "https://raw.githubusercontent.com/Chris-cell-sys/Targetex-e-mail-signature/main/";
+      var MAP = "https://www.google.com/maps/place/TargetEx+Biosciences+Ltd./@47.4551541,19.0402523,17z/data=!3m1!4b1!4m6!3m5!1s0x4741ddea725e421d:0xfee344ee068e07b4!8m2!3d47.4551541!4d19.0402523!16s%2Fg%2F11wqc3r8fk?entry=ttu&g_ep=EgoyMDI1MTExNy4wIKXMDSoASAFQAw%3D%3D";
+
+      function esc(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function nbsp(value) {
+        return esc(value).replace(/ /g, "&nbsp;");
+      }
+
+      function link(href, text) {
+        return '<a href="' + esc(href) + '" style="color:#111111; text-decoration:none; white-space:nowrap;"><span style="color:#111111; text-decoration:none;">' + nbsp(text) + "</span></a>";
+      }
+
+      function row(icon, inner, last) {
+        var pad = last ? "0" : "0 0 2px 0";
+        var textPad = last ? "0 0 0 4px" : "0 0 2px 4px";
+        return '<tr>' +
+          '<td width="14" valign="middle" style="width:14px; padding:' + pad + '; font-size:0; line-height:0; mso-line-height-rule:exactly;">' +
+          '<img src="' + IMG + icon + '" width="14" height="14" alt="" style="display:block; border:0; width:14px; height:14px;">' +
+          "</td>" +
+          '<td valign="middle" nowrap align="left" style="padding:' + textPad + '; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:14px; mso-line-height-rule:exactly; color:#111111; white-space:nowrap;">' +
+          inner +
+          "</td></tr>";
+      }
+
+      function phoneRow(icon, label, number, last) {
+        var text = label + ": " + number.trim();
+        return row(icon, nbsp(text), last);
+      }
+
+      function signatureHtml(data) {
+        var lines = [];
+        if (data.email) lines.push(row("mail.png", link("mailto:" + data.email.trim(), data.email.trim()), false));
+        if (data.mobile) lines.push(phoneRow("tel.jpg", "Mobile", data.mobile, false));
+        if (data.office) lines.push(phoneRow("tel.jpg", "Office", data.office, false));
+        lines.push(row("loc.png", link(MAP, "132–144 Fehérvári út").replace(nbsp("132–144 Fehérvári út"), "132–144&nbsp;Fehérvári&nbsp;út<br>Budapest&nbsp;1116,&nbsp;Hungary"), false));
+        lines.push(row("web.png", link("https://www.targetex.com", "www.targetex.com"), false));
+        lines.push(row("linkedin.png", link("https://hu.linkedin.com/company/targetex-ltd", "LinkedIn"), true));
+        var phones = (data.mobile ? 1 : 0) + (data.office ? 1 : 0);
+        var bar = 136 + phones * 16;
+        return '' +
+          '<table align="left" cellpadding="0" cellspacing="0" border="0" width="380" style="width:380px; border-collapse:collapse; table-layout:fixed; -webkit-text-size-adjust:100%; text-size-adjust:100%; font-family:Arial, Helvetica, sans-serif; color:#111111;">' +
+          "<tr>" +
+          '<td width="8" valign="top" style="width:8px; font-size:0; line-height:0;">' +
+          '<img src="' + IMG + 'red_bar.png" width="8" height="' + bar + '" alt="" style="display:block; border:0; width:8px; height:' + bar + 'px;">' +
+          "</td>" +
+          '<td width="372" valign="top" style="width:372px; padding-left:8px;">' +
+          '<table align="left" cellpadding="0" cellspacing="0" border="0" width="364" style="width:364px; border-collapse:collapse; table-layout:fixed;">' +
+          "<tr><td style=\"font-family:Arial, Helvetica, sans-serif; font-size:18px; font-weight:bold; line-height:20px; mso-line-height-rule:exactly; color:#111111;\">" + nbsp(data.name) + "</td></tr>" +
+          "<tr><td style=\"font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:14px; mso-line-height-rule:exactly; color:#555555; padding-bottom:6px;\">" + nbsp(data.title) + "</td></tr>" +
+          "<tr><td>" +
+          '<table align="left" cellpadding="0" cellspacing="0" border="0" width="364" style="width:364px; border-collapse:collapse; table-layout:fixed;">' +
+          "<tr>" +
+          '<td width="150" align="right" valign="middle" style="width:150px;">' +
+          '<img src="' + IMG + 'banner_3_2_wbg.gif" width="150" height="50" alt="" align="right" style="display:block; border:0; width:150px; height:50px;">' +
+          "</td>" +
+          '<td align="left" valign="middle" style="padding-left:6px;">' +
+          '<table align="left" cellpadding="0" cellspacing="0" border="0" width="208" style="width:208px; border-collapse:collapse; table-layout:fixed;">' +
+          lines.join("") +
+          "</table></td></tr></table></td></tr></table></td></tr></table>";
+      }
+
+      function readForm() {
+        return {
+          name: document.getElementById("name").value,
+          title: document.getElementById("title").value,
+          email: document.getElementById("email").value,
+          office: document.getElementById("office").value,
+          mobile: document.getElementById("mobile").value
+        };
+      }
+
+      function fitPreview() {
+        var preview = document.getElementById("preview");
+        var frame = document.getElementById("preview-scale");
+        var table = preview.querySelector("table");
+        preview.style.transform = "none";
+        frame.style.width = "auto";
+        frame.style.height = "auto";
+        if (!table) return;
+        var available = frame.parentElement.clientWidth;
+        var needed = table.offsetWidth;
+        var scale = !needed || !available ? 1 : Math.min(1, available / needed);
+        preview.style.transformOrigin = "top left";
+        preview.style.transform = "scale(" + scale + ")";
+        frame.style.width = Math.round(needed * scale) + "px";
+        frame.style.height = Math.round(table.offsetHeight * scale) + "px";
+      }
+
+      function render() {
+        document.getElementById("preview").innerHTML = signatureHtml(readForm());
+        fitPreview();
+      }
+
+      document.getElementById("fields").addEventListener("input", render);
+      window.addEventListener("resize", fitPreview);
+
+      document.getElementById("copy").addEventListener("click", function () {
+        var status = document.getElementById("status");
+        var table = document.querySelector("#preview table");
+        if (!table || !navigator.clipboard || !window.ClipboardItem) {
+          status.textContent = "Jelöld ki az aláírást, és másold ki kézzel.";
+          return;
+        }
+        var html = new Blob([table.outerHTML], { type: "text/html" });
+        var text = new Blob([table.innerText], { type: "text/plain" });
+        navigator.clipboard.write([new ClipboardItem({ "text/html": html, "text/plain": text })]).then(function () {
+          status.textContent = "Vágólapon van. Illeszd a levelező formázott aláírásmezőjébe.";
+        }, function () {
+          status.textContent = "Jelöld ki az aláírást, és másold ki kézzel.";
+        });
+      });
+
+      render();
+    </script>
+  </body>
+</html>
