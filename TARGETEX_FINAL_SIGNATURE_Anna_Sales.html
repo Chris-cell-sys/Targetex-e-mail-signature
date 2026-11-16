@@ -1,27 +1,33 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial, sans-serif; color:#111111;">
+    <!--
+      348px = 8 csík + 10 rés + 150 logó + 10 rés + 170 kontakt.
+      A leghosszabb sor (Mobile) Arial 12px-en ~133px, a szövegcella 150px,
+      ezért a szám és az email egy sorban marad, a kliens a blokkot kicsinyíti,
+      nem a sor közepén tör.
+    -->
+    <table cellpadding="0" cellspacing="0" border="0" width="348" style="width:348px; border-collapse:collapse; font-family:Arial, Helvetica, sans-serif; color:#111111;">
       <tr>
         <!-- Bal oldali csík -->
-        <td valign="top">
-          <img src="https://raw.githubusercontent.com/Chris-cell-sys/Targetex-e-mail-signature/main/red_bar.png" width="8" height="198" style="display:block;border:0;">
+        <td width="8" valign="top" style="width:8px; font-size:0; line-height:0;">
+          <img src="https://raw.githubusercontent.com/Chris-cell-sys/Targetex-e-mail-signature/main/red_bar.png" width="8" height="198" alt="" style="display:block; border:0; width:8px; height:198px;">
         </td>
 
-        <td width="14"></td>
+        <td width="10" style="width:10px; font-size:0; line-height:0;">&nbsp;</td>
 
         <!-- Fő tartalom -->
-        <td valign="top">
-          <table cellpadding="0" cellspacing="0" border="0">
+        <td width="330" valign="top" style="width:330px;">
+          <table cellpadding="0" cellspacing="0" border="0" width="330" style="width:330px; border-collapse:collapse;">
             <!-- Név -->
             <tr>
-              <td style="font-size:18px; font-weight:bold; line-height:20px;">
+              <td style="font-family:Arial, Helvetica, sans-serif; font-size:18px; font-weight:bold; line-height:20px; mso-line-height-rule:exactly; color:#111111;">
                 Anna Grád
               </td>
             </tr>
             <!-- Beosztás -->
             <tr>
-              <td style="font-size:12px; color:#555555; line-height:16px; padding-bottom:10px;">
+              <td style="font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#555555; line-height:16px; mso-line-height-rule:exactly; padding-bottom:10px;">
                 Sales Representative
               </td>
             </tr>
@@ -29,93 +35,79 @@
             <!-- Logó + kontakt adatok egymás mellett -->
             <tr>
               <td>
-                <table cellpadding="0" cellspacing="0" border="0">
+                <table cellpadding="0" cellspacing="0" border="0" width="330" style="width:330px; border-collapse:collapse;">
                   <tr>
-                    <!-- Logó oszlop (középre igazítva a saját oszlopában) -->
-                    <td align="center" valign="center" style="text-align:center; padding-right:14px;">
+                    <!-- Logó oszlop: a GIF jelölése változatlan -->
+                    <td width="150" align="center" valign="middle" style="width:150px;">
                       <img src="https://raw.githubusercontent.com/Chris-cell-sys/Targetex-e-mail-signature/main/banner_3_2_wbg.gif"
                            width="150"
                            style="display:block; margin:0 auto; max-width:150px; height:auto; border:0;">
                     </td>
+                    <td width="10" style="width:10px; font-size:0; line-height:0;">&nbsp;</td>
 
                     <!-- Kontakt adatok oszlop -->
-                    <td valign="top">
-                      <table cellpadding="0" cellspacing="5" border="0" style="font-size:12px; line-height:14px;">
+                    <td width="170" valign="top" style="width:170px;">
+                      <table cellpadding="0" cellspacing="0" border="0" width="170" style="width:170px; border-collapse:collapse;">
                         <tr>
-                          <td valign="top">
-                            <img src="https://raw.githubusercontent.com/Chris-cell-sys/Targetex-e-mail-signature/main/mail.png" width="14" style="display:block;border:0;">
+                          <td width="14" valign="middle" style="width:14px; padding:0 0 6px 0; font-size:0; line-height:0;">
+                            <img src="https://raw.githubusercontent.com/Chris-cell-sys/Targetex-e-mail-signature/main/mail.png" width="14" height="14" alt="" style="display:block; border:0; width:14px; height:14px;">
                           </td>
-                          <td width="3" style="width:3px;"></td>
-                          <td valign="top">
-                            <a href="mailto:grad@targetex.com" style="color:#111111; text-decoration:none;">
-                              grad@targetex.com
-                            </a>
+                          <td width="6" style="width:6px; padding:0 0 6px 0; font-size:0; line-height:0;">&nbsp;</td>
+                          <td width="150" valign="middle" nowrap style="width:150px; padding:0 0 6px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:16px; mso-line-height-rule:exactly; color:#111111; white-space:nowrap;">
+                            <a href="mailto:grad@targetex.com" style="color:#111111; text-decoration:none;"><span style="color:#111111; text-decoration:none;">grad@targetex.com</span></a>
                           </td>
                         </tr>
-
                         <tr>
-                          <td valign="top">
-                            <img src="https://raw.githubusercontent.com/Chris-cell-sys/Targetex-e-mail-signature/main/tel.jpg" width="14" style="display:block;border:0;">
+                          <td width="14" valign="middle" style="width:14px; padding:0 0 6px 0; font-size:0; line-height:0;">
+                            <img src="https://raw.githubusercontent.com/Chris-cell-sys/Targetex-e-mail-signature/main/tel.jpg" width="14" height="14" alt="" style="display:block; border:0; width:14px; height:14px;">
                           </td>
-                          <td width="3" style="width:3px;"></td>
-                          <td valign="top">
-                            Mobile: +36 30 252 0971
+                          <td width="6" style="width:6px; padding:0 0 6px 0; font-size:0; line-height:0;">&nbsp;</td>
+                          <td width="150" valign="middle" nowrap style="width:150px; padding:0 0 6px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:16px; mso-line-height-rule:exactly; color:#111111; white-space:nowrap;">
+                            Mobile:&nbsp;+36&nbsp;30&nbsp;252&nbsp;0971
                           </td>
                         </tr>
-
                         <tr>
-                          <td valign="top">
-                            <img src="https://raw.githubusercontent.com/Chris-cell-sys/Targetex-e-mail-signature/main/tel.jpg" width="14" style="display:block;border:0;">
+                          <td width="14" valign="middle" style="width:14px; padding:0 0 6px 0; font-size:0; line-height:0;">
+                            <img src="https://raw.githubusercontent.com/Chris-cell-sys/Targetex-e-mail-signature/main/tel.jpg" width="14" height="14" alt="" style="display:block; border:0; width:14px; height:14px;">
                           </td>
-                          <td width="3" style="width:3px;"></td>
-                          <td valign="top">
-                            Office: +36 30 252 0971
+                          <td width="6" style="width:6px; padding:0 0 6px 0; font-size:0; line-height:0;">&nbsp;</td>
+                          <td width="150" valign="middle" nowrap style="width:150px; padding:0 0 6px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:16px; mso-line-height-rule:exactly; color:#111111; white-space:nowrap;">
+                            Office:&nbsp;+36&nbsp;30&nbsp;252&nbsp;0971
                           </td>
                         </tr>
-
                         <tr>
-                          <td valign="center">
-                            <img src="https://raw.githubusercontent.com/Chris-cell-sys/Targetex-e-mail-signature/main/loc.png" width="14" style="display:block;border:0;">
+                          <td width="14" valign="middle" style="width:14px; padding:0 0 6px 0; font-size:0; line-height:0;">
+                            <img src="https://raw.githubusercontent.com/Chris-cell-sys/Targetex-e-mail-signature/main/loc.png" width="14" height="14" alt="" style="display:block; border:0; width:14px; height:14px;">
                           </td>
-                          <td width="3" style="width:3px;"></td>
-                          <td valign="top">
-                            <a href="https://www.google.com/maps/place/TargetEx+Biosciences+Ltd./@47.4551541,19.0402523,17z/data=!3m1!4b1!4m6!3m5!1s0x4741ddea725e421d:0xfee344ee068e07b4!8m2!3d47.4551541!4d19.0402523!16s%2Fg%2F11wqc3r8fk?entry=ttu&amp;g_ep=EgoyMDI1MTExNy4wIKXMDSoASAFQAw%3D%3D" style="color:#111111; text-decoration:none;">
-                              132–144 Fehérvári út<br>Budapest 1116, Hungary
-                            </a>
+                          <td width="6" style="width:6px; padding:0 0 6px 0; font-size:0; line-height:0;">&nbsp;</td>
+                          <td width="150" valign="middle" nowrap style="width:150px; padding:0 0 6px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:16px; mso-line-height-rule:exactly; color:#111111; white-space:nowrap;">
+                            <a href="https://www.google.com/maps/place/TargetEx+Biosciences+Ltd./@47.4551541,19.0402523,17z/data=!3m1!4b1!4m6!3m5!1s0x4741ddea725e421d:0xfee344ee068e07b4!8m2!3d47.4551541!4d19.0402523!16s%2Fg%2F11wqc3r8fk?entry=ttu&amp;g_ep=EgoyMDI1MTExNy4wIKXMDSoASAFQAw%3D%3D" style="color:#111111; text-decoration:none;"><span style="color:#111111; text-decoration:none;">132–144&nbsp;Fehérvári&nbsp;út<br>Budapest&nbsp;1116,&nbsp;Hungary</span></a>
                           </td>
                         </tr>
-
                         <tr>
-                          <td valign="top">
-                            <img src="https://raw.githubusercontent.com/Chris-cell-sys/Targetex-e-mail-signature/main/web.png" width="14" style="display:block;border:0;">
+                          <td width="14" valign="middle" style="width:14px; padding:0 0 6px 0; font-size:0; line-height:0;">
+                            <img src="https://raw.githubusercontent.com/Chris-cell-sys/Targetex-e-mail-signature/main/web.png" width="14" height="14" alt="" style="display:block; border:0; width:14px; height:14px;">
                           </td>
-                          <td width="3" style="width:3px;"></td>
-                          <td valign="top">
-                            <a href="https://www.targetex.com" style="color:#111111; text-decoration:none;">
-                              www.targetex.com
-                            </a>
+                          <td width="6" style="width:6px; padding:0 0 6px 0; font-size:0; line-height:0;">&nbsp;</td>
+                          <td width="150" valign="middle" nowrap style="width:150px; padding:0 0 6px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:16px; mso-line-height-rule:exactly; color:#111111; white-space:nowrap;">
+                            <a href="https://www.targetex.com" style="color:#111111; text-decoration:none;"><span style="color:#111111; text-decoration:none;">www.targetex.com</span></a>
                           </td>
                         </tr>
-
                         <tr>
-                          <td valign="top">
-                            <img src="https://raw.githubusercontent.com/Chris-cell-sys/Targetex-e-mail-signature/main/linkedin.png" width="14" style="display:block;border:0;">
+                          <td width="14" valign="middle" style="width:14px; padding:0; font-size:0; line-height:0;">
+                            <img src="https://raw.githubusercontent.com/Chris-cell-sys/Targetex-e-mail-signature/main/linkedin.png" width="14" height="14" alt="" style="display:block; border:0; width:14px; height:14px;">
                           </td>
-                          <td width="3" style="width:3px;"></td>
-                          <td valign="top">
-                            <a href="https://hu.linkedin.com/company/targetex-ltd" style="color:#111111; text-decoration:none;">
-                              LinkedIn
-                            </a>
+                          <td width="6" style="width:6px; padding:0; font-size:0; line-height:0;">&nbsp;</td>
+                          <td width="150" valign="middle" nowrap style="width:150px; padding:0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:16px; mso-line-height-rule:exactly; color:#111111; white-space:nowrap;">
+                            <a href="https://hu.linkedin.com/company/targetex-ltd" style="color:#111111; text-decoration:none;"><span style="color:#111111; text-decoration:none;">LinkedIn</span></a>
                           </td>
                         </tr>
-
                       </table>
                     </td>
                   </tr>
                 </table>
               </td>
             </tr>
-
           </table>
         </td>
       </tr>
