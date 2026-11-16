@@ -16,7 +16,6 @@
       input { width: 100%; box-sizing: border-box; font: 14px Arial, Helvetica, sans-serif; padding: 6px 8px; border: 1px solid #ccc; }
       label.check { display: flex; align-items: center; gap: 8px; font-size: 14px; }
       label.check input { width: auto; margin: 0; padding: 0; }
-      .hint { font-size: 12px; color: #555; margin: 0 0 12px; }
       button { font: 14px Arial, Helvetica, sans-serif; padding: 8px 12px; background: #9a0000; color: #fff; border: 0; cursor: pointer; }
       button:disabled { background: #999; }
       #status { font-size: 12px; min-height: 16px; margin-top: 8px; }
@@ -28,15 +27,14 @@
   <body>
     <main>
       <h1>Targetex aláírás</h1>
-      <p class="lead">Töltsd ki az adatokat. A mobil számot írd be, az office számot a pipa teszi hozzá. Jelöld ki a kész aláírást, másold ki, és illeszd a levelező formázott aláírásmezőjébe.</p>
+      <p class="lead">Töltsd ki az adatokat. A mobil számot írd be, az office számot a pipa teszi hozzá.</p>
       <div class="layout">
         <form id="fields" autocomplete="off">
           <label><span>Név</span><input id="name" name="name"></label>
           <label><span>Beosztás</span><input id="title" name="title"></label>
           <label><span>Email</span><input id="email" name="email" type="email"></label>
           <label class="check"><input id="office" name="office" type="checkbox" checked> Office: +36 30 252 0971</label>
-          <label><span>Mobil</span><input id="mobile" name="mobile"></label>
-          <p class="hint">Csak mobilhoz vedd ki az office pipát. Üres mobil mezőnél a Mobile sor kimarad.</p>
+          <label><span>Mobil</span><input id="mobile" name="mobile" type="tel" inputmode="tel" autocomplete="tel" value="+36 "></label>
           <button type="button" id="copy">Aláírás másolása</button>
           <div id="status"></div>
         </form>
@@ -116,13 +114,54 @@
           "</table></td></tr></table></td></tr></table></td></tr></table>";
       }
 
+      function subscriberDigits(value) {
+        var raw = String(value);
+        var digits = raw.replace(/\D/g, "");
+        if (raw.charAt(0) === "+") {
+          if (digits === "" || digits === "3" || digits === "36") return "";
+          if (digits.indexOf("36") === 0) digits = digits.slice(2);
+        } else if (digits.indexOf("0036") === 0) digits = digits.slice(4);
+        else if (digits.indexOf("06") === 0) digits = digits.slice(2);
+        else if (digits.charAt(0) === "0") digits = digits.slice(1);
+        return digits.slice(0, 9);
+      }
+
+      function formatMobile(value) {
+        var digits = subscriberDigits(value);
+        var groups = [digits.slice(0, 2), digits.slice(2, 5), digits.slice(5, 9)].filter(function (part) { return part; });
+        return "+36" + (groups.length ? " " + groups.join(" ") : " ");
+      }
+
+      function formatMobileField(input) {
+        var caret = input.selectionStart == null ? input.value.length : input.selectionStart;
+        var need = subscriberDigits(input.value.slice(0, caret)).length;
+        var formatted = formatMobile(input.value);
+        if (input.value !== formatted) input.value = formatted;
+        var pos = 4;
+        var seen = 0;
+        var i;
+        for (i = 3; i < formatted.length; i++) {
+          var ch = formatted.charAt(i);
+          if (ch >= "0" && ch <= "9") {
+            seen++;
+            if (seen === need) {
+              pos = i + 1;
+              break;
+            }
+          }
+        }
+        if (need === 0) pos = 4;
+        if (input.setSelectionRange) input.setSelectionRange(pos, pos);
+      }
+
       function readForm() {
+        var mobile = formatMobile(document.getElementById("mobile").value);
         return {
           name: document.getElementById("name").value,
           title: document.getElementById("title").value,
           email: document.getElementById("email").value,
           office: document.getElementById("office").checked ? OFFICE : "",
-          mobile: document.getElementById("mobile").value
+          mobile: subscriberDigits(mobile) ? mobile : ""
         };
       }
 
@@ -148,6 +187,19 @@
         fitPreview();
       }
 
+      document.getElementById("mobile").addEventListener("beforeinput", function (event) {
+        var start = this.selectionStart;
+        var end = this.selectionEnd;
+        var kind = event.inputType || "";
+        if (start >= 4 || kind.indexOf("delete") !== 0) return;
+        event.preventDefault();
+        this.value = "+36 " + this.value.slice(Math.max(end, 4));
+        formatMobileField(this);
+        this.dispatchEvent(new Event("input", { bubbles: true }));
+      });
+      document.getElementById("mobile").addEventListener("input", function () {
+        formatMobileField(this);
+      });
       document.getElementById("fields").addEventListener("input", render);
       document.getElementById("fields").addEventListener("change", render);
       window.addEventListener("resize", fitPreview);
