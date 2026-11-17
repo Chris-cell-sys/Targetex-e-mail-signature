@@ -80,11 +80,10 @@
 
       function row(icon, inner) {
         return '<tr>' +
-          '<td width="16" height="18" valign="middle" style="width:16px; max-width:16px; height:18px; vertical-align:middle;">' +
-          '<img src="' + IMG + icon + '" width="14" height="14" alt="" align="middle" style="vertical-align:middle; border:0; outline:none; text-decoration:none; width:14px; height:14px;">' +
+          '<td width="14" valign="middle" style="width:14px; padding:0 4px 1px 0; vertical-align:middle; font-size:0; line-height:0;">' +
+          '<img src="' + IMG + icon + '" width="14" height="14" alt="" border="0" style="display:block; border:0; outline:none; text-decoration:none; width:14px !important; height:14px !important;">' +
           "</td>" +
-          '<td width="6" style="width:6px; max-width:6px; font-size:1px; line-height:1px;">&nbsp;</td>' +
-          '<td valign="middle" nowrap align="left" style="vertical-align:middle; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:18px; color:#111111; white-space:nowrap;">' +
+          '<td valign="middle" nowrap align="left" style="padding:0 0 1px 0; vertical-align:middle; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:15px; color:#111111; white-space:nowrap;">' +
           inner +
           "</td></tr>";
       }
@@ -106,27 +105,27 @@
         lines.push(row("web.png", link("https://www.targetex.com/?utm_source=alairas&utm_medium=email&utm_campaign=email-alairas", "www.targetex.com")));
         lines.push(row("linkedin.png", link("https://hu.linkedin.com/company/targetex-ltd", "LinkedIn")));
         var phones = (data.mobile ? 1 : 0) + (data.office ? 1 : 0);
-        var barName = ["red_bar_136.png", "red_bar_154.png", "red_bar_172.png"][phones];
-        var barH = [136, 154, 172][phones];
-        var pair = plainTable(
+        var barName = ["red_bar_0.png", "red_bar_1.png", "red_bar_2.png"][phones];
+        var barH = [119, 135, 151][phones];
+        var contacts = '<table cellpadding="0" cellspacing="0" border="0" width="210" style="width:210px !important; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">' + lines.join("") + "</table>";
+        var pair = '<table cellpadding="0" cellspacing="0" border="0" width="368" style="width:368px !important; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">' +
           "<tr>" +
-          '<td width="150" valign="middle" style="width:150px; max-width:150px;">' +
-          '<img src="' + IMG + 'banner_3_2_wbg.gif" width="150" height="50" alt="" style="display:block; border:0; outline:none; text-decoration:none; width:150px; height:50px;">' +
+          '<td width="150" valign="middle" style="width:150px !important; padding:0 8px 0 0;">' +
+          '<img src="' + IMG + 'banner_3_2_wbg.gif" width="150" height="50" alt="" border="0" style="display:block; border:0; outline:none; text-decoration:none; width:150px !important; height:50px !important;">' +
           "</td>" +
-          '<td width="16" style="width:16px; max-width:16px; font-size:1px; line-height:1px;">&nbsp;</td>' +
-          '<td valign="middle">' + plainTable(lines.join("")) + "</td>" +
-          "</tr>");
+          '<td width="210" valign="middle" style="width:210px !important;">' + contacts + "</td>" +
+          "</tr></table>";
         var content = plainTable(
-          '<tr><td height="22" style="height:22px; font-family:Arial, Helvetica, sans-serif; font-size:18px; font-weight:bold; line-height:22px; color:#111111;">' + nbsp(data.name) + "</td></tr>" +
-          '<tr><td height="18" style="height:18px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:18px; color:#555555; padding-bottom:6px;">' + nbsp(data.title) + "</td></tr>" +
+          '<tr><td style="font-family:Arial, Helvetica, sans-serif; font-size:18px; font-weight:bold; line-height:20px; color:#111111; padding:0;">' + nbsp(data.name) + "</td></tr>" +
+          '<tr><td style="font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:14px; color:#555555; padding:0 0 4px 0;">' + nbsp(data.title) + "</td></tr>" +
           "<tr><td>" + pair + "</td></tr>");
-        return '<table align="left" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; font-family:Arial, Helvetica, sans-serif; color:#111111;">' +
+        return '<table align="left" cellpadding="0" cellspacing="0" border="0" width="390" style="width:390px !important; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; font-family:Arial, Helvetica, sans-serif; color:#111111;">' +
           "<tr>" +
-          '<td width="8" valign="top" style="width:8px; max-width:8px;">' +
-          '<img src="' + IMG + barName + '" width="8" height="' + barH + '" alt="" style="display:block; border:0; outline:none; text-decoration:none; width:8px; height:' + barH + 'px;">' +
+          '<td width="8" valign="top" style="width:8px !important;">' +
+          '<img src="' + IMG + barName + '" width="8" height="' + barH + '" alt="" border="0" style="display:block; border:0; outline:none; text-decoration:none; width:8px !important; height:' + barH + 'px !important;">' +
           "</td>" +
-          '<td width="12" style="width:12px; max-width:12px; font-size:1px; line-height:1px;">&nbsp;</td>' +
-          "<td valign=\"top\">" + content + "</td>" +
+          '<td width="10" style="width:10px !important; font-size:0; line-height:0;">&nbsp;</td>' +
+          '<td width="372" valign="top" style="width:372px !important;">' + content + "</td>" +
           "</tr></table>";
       }
 
