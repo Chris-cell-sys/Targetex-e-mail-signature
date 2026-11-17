@@ -7,8 +7,13 @@
     <style>
       body { margin: 0; background: #f3f3f3; color: #111; font-family: Arial, Helvetica, sans-serif; }
       main { max-width: 920px; margin: 0 auto; padding: 24px 16px 48px; }
-      h1 { font-size: 20px; margin: 0 0 8px; }
-      p.lead { margin: 0 0 20px; font-size: 14px; line-height: 1.4; color: #333; }
+      .heading { display: flex; align-items: center; gap: 8px; margin: 0 0 20px; }
+      h1 { font-size: 20px; margin: 0; }
+      #info { width: 22px; height: 22px; padding: 0; border: 1px solid #111; border-radius: 50%; background: #fff; color: #111; font: italic 14px/20px Georgia, "Times New Roman", serif; cursor: pointer; }
+      #help { width: 420px; max-width: 100%; margin: -8px 0 20px; background: #fff; border: 1px solid #ccc; padding: 12px 14px; font-size: 13px; line-height: 1.4; }
+      #help ol { margin: 0; padding-left: 18px; }
+      #help li { margin: 0 0 6px; }
+      #help li:last-child { margin: 0; }
       .layout { display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; width: 100%; }
       form { width: 280px; max-width: 100%; background: #fff; padding: 16px; }
       label { display: block; font-size: 12px; margin: 0 0 12px; }
@@ -16,18 +21,27 @@
       input { width: 100%; box-sizing: border-box; font: 14px Arial, Helvetica, sans-serif; padding: 6px 8px; border: 1px solid #ccc; }
       label.check { display: flex; align-items: center; gap: 8px; font-size: 14px; }
       label.check input { width: auto; margin: 0; padding: 0; }
-      button { font: 14px Arial, Helvetica, sans-serif; padding: 8px 12px; background: #9a0000; color: #fff; border: 0; cursor: pointer; }
-      button:disabled { background: #999; }
+      #copy { font: 14px Arial, Helvetica, sans-serif; padding: 8px 12px; background: #9a0000; color: #fff; border: 0; cursor: pointer; }
+      #copy:disabled { background: #999; }
       #status { font-size: 12px; min-height: 16px; margin-top: 8px; }
       .preview-wrap { background: #fff; padding: 16px; max-width: 100%; min-width: 0; }
-      .preview-wrap h2 { font-size: 13px; font-weight: normal; color: #555; margin: 0 0 12px; }
       #preview-scale { overflow: hidden; }
     </style>
   </head>
   <body>
     <main>
-      <h1>Targetex aláírás</h1>
-      <p class="lead">Töltsd ki az adatokat. A mobil számot írd be, az office számot a pipa teszi hozzá.</p>
+      <div class="heading">
+        <h1>Targetex aláírás</h1>
+        <button type="button" id="info" aria-expanded="false" aria-controls="help" aria-label="Teendők">i</button>
+      </div>
+      <div id="help" hidden>
+        <ol>
+          <li>Töltsd ki a nevet, a beosztást és az emailt.</li>
+          <li>A mobil számot a +36 után írd. Ha üresen hagyod, a Mobile sor kimarad.</li>
+          <li>Az office szám a pipával kerül be. Vedd ki a pipát, ha nem kell.</li>
+          <li>Az Aláírás másolása gomb a kész aláírást a vágólapra teszi. Illeszd a levelező formázott aláírásmezőjébe.</li>
+        </ol>
+      </div>
       <div class="layout">
         <form id="fields" autocomplete="off">
           <label><span>Név</span><input id="name" name="name"></label>
@@ -39,7 +53,6 @@
           <div id="status"></div>
         </form>
         <div class="preview-wrap">
-          <h2>Ezt másold ki</h2>
           <div id="preview-scale"><div id="preview"></div></div>
         </div>
       </div>
@@ -200,6 +213,25 @@
       document.getElementById("mobile").addEventListener("input", function () {
         formatMobileField(this);
       });
+      var infoButton = document.getElementById("info");
+      var help = document.getElementById("help");
+      function setHelp(open) {
+        if (open) help.removeAttribute("hidden");
+        else help.setAttribute("hidden", "");
+        infoButton.setAttribute("aria-expanded", open ? "true" : "false");
+      }
+      infoButton.addEventListener("click", function (event) {
+        event.stopPropagation();
+        setHelp(help.hasAttribute("hidden"));
+      });
+      document.addEventListener("click", function (event) {
+        if (help.hasAttribute("hidden") || help.contains(event.target)) return;
+        setHelp(false);
+      });
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") setHelp(false);
+      });
+
       document.getElementById("fields").addEventListener("input", render);
       document.getElementById("fields").addEventListener("change", render);
       window.addEventListener("resize", fitPreview);
