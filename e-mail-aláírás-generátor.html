@@ -78,53 +78,78 @@
         return '<a href="' + esc(href) + '" style="color:#111111; text-decoration:none; white-space:nowrap;"><span style="color:#111111; text-decoration:none;">' + nbsp(text) + "</span></a>";
       }
 
-      function row(icon, inner, last) {
-        var pad = last ? "0" : "0 0 2px 0";
-        var textPad = last ? "0 0 0 4px" : "0 0 2px 4px";
+      function row(icon, inner, lines) {
+        var h = lines * 16;
         return '<tr>' +
-          '<td width="14" valign="middle" style="width:14px; padding:' + pad + '; font-size:0; line-height:0; mso-line-height-rule:exactly;">' +
-          '<img src="' + IMG + icon + '" width="14" height="14" alt="" style="display:block; border:0; width:14px; height:14px;">' +
+          '<td width="16" height="' + h + '" valign="middle" style="width:16px; height:' + h + 'px; font-size:14px; line-height:16px; mso-line-height-rule:exactly;">' +
+          '<img src="' + IMG + icon + '" width="14" height="14" alt="" hspace="0" vspace="0" style="display:block; border:0; outline:none; text-decoration:none; width:14px; height:14px;">' +
           "</td>" +
-          '<td valign="middle" nowrap align="left" style="padding:' + textPad + '; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:14px; mso-line-height-rule:exactly; color:#111111; white-space:nowrap;">' +
+          '<td height="' + h + '" valign="middle" nowrap align="left" style="height:' + h + 'px; padding:0 0 0 6px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:16px; mso-line-height-rule:exactly; color:#111111; white-space:nowrap;">' +
           inner +
           "</td></tr>";
       }
 
-      function phoneRow(icon, label, number, last) {
-        var text = label + ": " + number.trim();
-        return row(icon, nbsp(text), last);
+      function phoneRow(icon, label, number) {
+        return row(icon, nbsp(label + ": " + number.trim()), 1);
+      }
+
+      function plainTable(width, inner) {
+        return '<table cellpadding="0" cellspacing="0" border="0" width="' + width + '" style="width:' + width + 'px; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">' + inner + "</table>";
+      }
+
+      function blockTable(width, extraStyle, inner) {
+        return '<table align="left" cellpadding="0" cellspacing="0" border="0" width="' + width + '" style="width:' + width + 'px; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; ' + extraStyle + '">' + inner + "</table>";
+      }
+
+      function barTable(midH) {
+        function slice(src, h, fill) {
+          var bg = fill ? ' bgcolor="#9a0000"' : "";
+          var bgStyle = fill ? " background-color:#9a0000;" : "";
+          return '<tr><td width="8" height="' + h + '" valign="top"' + bg + ' style="width:8px; height:' + h + 'px;' + bgStyle + ' font-size:1px; line-height:' + h + 'px; mso-line-height-rule:exactly;">' +
+            '<img src="' + IMG + src + '" width="8" height="' + h + '" alt="" hspace="0" vspace="0" style="display:block; border:0; outline:none; text-decoration:none; width:8px; height:' + h + 'px;">' +
+            "</td></tr>";
+        }
+        return plainTable(8,
+          slice("red_bar_top.png", 10, false) +
+          slice("red_bar_mid.png", midH, true) +
+          slice("red_bar_bot.png", 8, false));
       }
 
       function signatureHtml(data) {
         var lines = [];
-        if (data.email) lines.push(row("mail.png", link("mailto:" + data.email.trim(), data.email.trim()), false));
-        if (data.mobile) lines.push(phoneRow("tel.jpg", "Mobile", data.mobile, false));
-        if (data.office) lines.push(phoneRow("tel.jpg", "Office", data.office, false));
-        lines.push(row("loc.png", link(MAP, "132–144 Fehérvári út").replace(nbsp("132–144 Fehérvári út"), "132–144&nbsp;Fehérvári&nbsp;út<br>Budapest&nbsp;1116,&nbsp;Hungary"), false));
-        lines.push(row("web.png", link("https://www.targetex.com/?utm_source=alairas&utm_medium=email&utm_campaign=email-alairas", "www.targetex.com"), false));
-        lines.push(row("linkedin.png", link("https://hu.linkedin.com/company/targetex-ltd", "LinkedIn"), true));
-        var phones = (data.mobile ? 1 : 0) + (data.office ? 1 : 0);
-        var bar = 136 + phones * 16;
-        return '' +
-          '<table align="left" cellpadding="0" cellspacing="0" border="0" width="380" style="width:380px; border-collapse:collapse; table-layout:fixed; -webkit-text-size-adjust:100%; text-size-adjust:100%; font-family:Arial, Helvetica, sans-serif; color:#111111;">' +
+        if (data.email) lines.push(row("mail.png", link("mailto:" + data.email.trim(), data.email.trim()), 1));
+        if (data.mobile) lines.push(phoneRow("tel.jpg", "Mobile", data.mobile));
+        if (data.office) lines.push(phoneRow("tel.jpg", "Office", data.office));
+        lines.push(row("loc.png", link(MAP, "132–144 Fehérvári út").replace(nbsp("132–144 Fehérvári út"), "132–144&nbsp;Fehérvári&nbsp;út<br>Budapest&nbsp;1116,&nbsp;Hungary"), 2));
+        lines.push(row("web.png", link("https://www.targetex.com/?utm_source=alairas&utm_medium=email&utm_campaign=email-alairas", "www.targetex.com"), 1));
+        lines.push(row("linkedin.png", link("https://hu.linkedin.com/company/targetex-ltd", "LinkedIn"), 1));
+        var lineUnits = 5 + (data.mobile ? 1 : 0) + (data.office ? 1 : 0);
+        var contactH = lineUnits * 16;
+        var pairH = Math.max(50, contactH);
+        var logoShift = Math.floor((pairH - 50) / 2);
+        var midH = (20 + 14 + 6 + pairH) - 18;
+        var logo = blockTable(150, "margin:" + logoShift + "px 6px 0 0;",
+          '<tr><td width="150" height="50" valign="middle" style="width:150px; height:50px; font-size:1px; line-height:50px; mso-line-height-rule:exactly;">' +
+          '<img src="' + IMG + 'banner_3_2_wbg.gif" width="150" height="50" alt="" hspace="0" vspace="0" style="display:block; border:0; outline:none; text-decoration:none; width:150px; height:50px;">' +
+          "</td></tr>");
+        var contacts = blockTable(200, "margin:0;", lines.join(""));
+        var pair = "<!--[if mso]><table cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td width=\"150\" valign=\"middle\"><![endif]-->" +
+          logo +
+          "<!--[if mso]></td><td width=\"6\" style=\"font-size:1px; line-height:1px;\">&nbsp;</td><td width=\"200\" valign=\"middle\"><![endif]-->" +
+          contacts +
+          "<!--[if mso]></td></tr></table><![endif]-->" +
+          '<!--[if !mso]><!-- --><div style="clear:both; display:block; font-size:1px; line-height:1px;">&nbsp;</div><!--<![endif]-->';
+        var content = plainTable(364,
+          '<tr><td height="20" style="height:20px; font-family:Arial, Helvetica, sans-serif; font-size:18px; font-weight:bold; line-height:20px; mso-line-height-rule:exactly; color:#111111;">' + nbsp(data.name) + "</td></tr>" +
+          '<tr><td height="14" style="height:14px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:14px; mso-line-height-rule:exactly; color:#555555;">' + nbsp(data.title) + "</td></tr>" +
+          '<tr><td height="6" style="height:6px; font-size:1px; line-height:6px; mso-line-height-rule:exactly;">&nbsp;</td></tr>' +
+          '<tr><td valign="top">' + pair + "</td></tr>");
+        return '<table align="left" cellpadding="0" cellspacing="0" border="0" width="380" style="width:380px; max-width:380px; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; font-family:Arial, Helvetica, sans-serif; color:#111111;">' +
           "<tr>" +
-          '<td width="8" valign="top" style="width:8px; font-size:0; line-height:0;">' +
-          '<img src="' + IMG + 'red_bar.png" width="8" height="' + bar + '" alt="" style="display:block; border:0; width:8px; height:' + bar + 'px;">' +
-          "</td>" +
-          '<td width="372" valign="top" style="width:372px; padding-left:8px;">' +
-          '<table align="left" cellpadding="0" cellspacing="0" border="0" width="364" style="width:364px; border-collapse:collapse; table-layout:fixed;">' +
-          "<tr><td style=\"font-family:Arial, Helvetica, sans-serif; font-size:18px; font-weight:bold; line-height:20px; mso-line-height-rule:exactly; color:#111111;\">" + nbsp(data.name) + "</td></tr>" +
-          "<tr><td style=\"font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:14px; mso-line-height-rule:exactly; color:#555555; padding-bottom:6px;\">" + nbsp(data.title) + "</td></tr>" +
-          "<tr><td>" +
-          '<table align="left" cellpadding="0" cellspacing="0" border="0" width="364" style="width:364px; border-collapse:collapse; table-layout:fixed;">' +
-          "<tr>" +
-          '<td width="150" align="right" valign="middle" style="width:150px;">' +
-          '<img src="' + IMG + 'banner_3_2_wbg.gif" width="150" height="50" alt="" align="right" style="display:block; border:0; width:150px; height:50px;">' +
-          "</td>" +
-          '<td align="left" valign="middle" style="padding-left:6px;">' +
-          '<table align="left" cellpadding="0" cellspacing="0" border="0" width="208" style="width:208px; border-collapse:collapse; table-layout:fixed;">' +
-          lines.join("") +
-          "</table></td></tr></table></td></tr></table></td></tr></table>";
+          '<td width="8" valign="top" style="width:8px;">' + barTable(midH) + "</td>" +
+          '<td width="8" style="width:8px; font-size:1px; line-height:1px;">&nbsp;</td>' +
+          '<td width="364" valign="top" style="width:364px;">' + content + "</td>" +
+          "</tr></table>";
       }
 
       function subscriberDigits(value) {
@@ -195,8 +220,11 @@
         frame.style.height = Math.round(table.offsetHeight * scale) + "px";
       }
 
+      var currentHtml = "";
+
       function render() {
-        document.getElementById("preview").innerHTML = signatureHtml(readForm());
+        currentHtml = signatureHtml(readForm());
+        document.getElementById("preview").innerHTML = currentHtml;
         fitPreview();
       }
 
@@ -239,11 +267,11 @@
       document.getElementById("copy").addEventListener("click", function () {
         var status = document.getElementById("status");
         var table = document.querySelector("#preview table");
-        if (!table || !navigator.clipboard || !window.ClipboardItem) {
+        if (!currentHtml || !table || !navigator.clipboard || !window.ClipboardItem) {
           status.textContent = "Jelöld ki az aláírást, és másold ki kézzel.";
           return;
         }
-        var html = new Blob([table.outerHTML], { type: "text/html" });
+        var html = new Blob([currentHtml], { type: "text/html" });
         var text = new Blob([table.innerText], { type: "text/plain" });
         navigator.clipboard.write([new ClipboardItem({ "text/html": html, "text/plain": text })]).then(function () {
           status.textContent = "Vágólapon van. Illeszd a levelező formázott aláírásmezőjébe.";
