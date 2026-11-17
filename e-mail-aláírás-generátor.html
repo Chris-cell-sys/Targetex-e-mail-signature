@@ -78,19 +78,18 @@
         return '<a href="' + esc(href) + '" style="color:#111111; text-decoration:none; white-space:nowrap;"><span style="color:#111111; text-decoration:none;">' + nbsp(text) + "</span></a>";
       }
 
-      function row(icon, inner, lines) {
-        var h = lines * 16;
+      function row(icon, inner) {
         return '<tr>' +
-          '<td width="16" height="' + h + '" valign="middle" style="width:16px; height:' + h + 'px; font-size:14px; line-height:16px; mso-line-height-rule:exactly;">' +
-          '<img src="' + IMG + icon + '" width="14" height="14" alt="" hspace="0" vspace="0" style="display:block; border:0; outline:none; text-decoration:none; width:14px; height:14px;">' +
+          '<td width="14" valign="middle" style="width:14px; vertical-align:middle; padding:0 4px 2px 0; font-size:0; line-height:14px; mso-line-height-rule:exactly;">' +
+          '<img src="' + IMG + icon + '" width="14" height="14" alt="" align="middle" style="vertical-align:middle; border:0; outline:none; text-decoration:none; width:14px; height:14px;">' +
           "</td>" +
-          '<td height="' + h + '" valign="middle" nowrap align="left" style="height:' + h + 'px; padding:0 0 0 6px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:16px; mso-line-height-rule:exactly; color:#111111; white-space:nowrap;">' +
+          '<td valign="middle" nowrap align="left" style="vertical-align:middle; padding:0 0 2px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:14px; mso-line-height-rule:exactly; color:#111111; white-space:nowrap;">' +
           inner +
           "</td></tr>";
       }
 
       function phoneRow(icon, label, number) {
-        return row(icon, nbsp(label + ": " + number.trim()), 1);
+        return row(icon, nbsp(label + ": " + number.trim()));
       }
 
       function plainTable(width, inner) {
@@ -101,33 +100,20 @@
         return '<table align="left" cellpadding="0" cellspacing="0" border="0" width="' + width + '" style="width:' + width + 'px; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; ' + extraStyle + '">' + inner + "</table>";
       }
 
-      function barTable(midH) {
-        function slice(src, h, fill) {
-          var bg = fill ? ' bgcolor="#9a0000"' : "";
-          var bgStyle = fill ? " background-color:#9a0000;" : "";
-          return '<tr><td width="8" height="' + h + '" valign="top"' + bg + ' style="width:8px; height:' + h + 'px;' + bgStyle + ' font-size:1px; line-height:' + h + 'px; mso-line-height-rule:exactly;">' +
-            '<img src="' + IMG + src + '" width="8" height="' + h + '" alt="" hspace="0" vspace="0" style="display:block; border:0; outline:none; text-decoration:none; width:8px; height:' + h + 'px;">' +
-            "</td></tr>";
-        }
-        return plainTable(8,
-          slice("red_bar_top.png", 10, false) +
-          slice("red_bar_mid.png", midH, true) +
-          slice("red_bar_bot.png", 8, false));
-      }
-
       function signatureHtml(data) {
         var lines = [];
-        if (data.email) lines.push(row("mail.png", link("mailto:" + data.email.trim(), data.email.trim()), 1));
+        if (data.email) lines.push(row("mail.png", link("mailto:" + data.email.trim(), data.email.trim())));
         if (data.mobile) lines.push(phoneRow("tel.jpg", "Mobile", data.mobile));
         if (data.office) lines.push(phoneRow("tel.jpg", "Office", data.office));
-        lines.push(row("loc.png", link(MAP, "132–144 Fehérvári út").replace(nbsp("132–144 Fehérvári út"), "132–144&nbsp;Fehérvári&nbsp;út<br>Budapest&nbsp;1116,&nbsp;Hungary"), 2));
-        lines.push(row("web.png", link("https://www.targetex.com/?utm_source=alairas&utm_medium=email&utm_campaign=email-alairas", "www.targetex.com"), 1));
-        lines.push(row("linkedin.png", link("https://hu.linkedin.com/company/targetex-ltd", "LinkedIn"), 1));
-        var lineUnits = 5 + (data.mobile ? 1 : 0) + (data.office ? 1 : 0);
-        var contactH = lineUnits * 16;
+        lines.push(row("loc.png", link(MAP, "132–144 Fehérvári út").replace(nbsp("132–144 Fehérvári út"), "132–144&nbsp;Fehérvári&nbsp;út<br>Budapest&nbsp;1116,&nbsp;Hungary")));
+        lines.push(row("web.png", link("https://www.targetex.com/?utm_source=alairas&utm_medium=email&utm_campaign=email-alairas", "www.targetex.com")));
+        lines.push(row("linkedin.png", link("https://hu.linkedin.com/company/targetex-ltd", "LinkedIn")));
+        var phones = (data.mobile ? 1 : 0) + (data.office ? 1 : 0);
+        var contactLines = 6 + phones;
+        var contactH = contactLines * 16;
         var pairH = Math.max(50, contactH);
         var logoShift = Math.floor((pairH - 50) / 2);
-        var midH = (20 + 14 + 6 + pairH) - 18;
+        var barH = [119, 135, 151][phones];
         var logo = blockTable(150, "margin:" + logoShift + "px 6px 0 0;",
           '<tr><td width="150" height="50" valign="middle" style="width:150px; height:50px; font-size:1px; line-height:50px; mso-line-height-rule:exactly;">' +
           '<img src="' + IMG + 'banner_3_2_wbg.gif" width="150" height="50" alt="" hspace="0" vspace="0" style="display:block; border:0; outline:none; text-decoration:none; width:150px; height:50px;">' +
@@ -146,7 +132,9 @@
           '<tr><td valign="top">' + pair + "</td></tr>");
         return '<table align="left" cellpadding="0" cellspacing="0" border="0" width="380" style="width:380px; max-width:380px; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; font-family:Arial, Helvetica, sans-serif; color:#111111;">' +
           "<tr>" +
-          '<td width="8" valign="top" style="width:8px;">' + barTable(midH) + "</td>" +
+          '<td width="8" valign="top" style="width:8px; font-size:0; line-height:0; mso-line-height-rule:exactly;">' +
+          '<img src="' + IMG + "red_bar_" + phones + '.png" width="8" height="' + barH + '" alt="" style="display:block; border:0; outline:none; text-decoration:none; width:8px; height:' + barH + 'px;">' +
+          "</td>" +
           '<td width="8" style="width:8px; font-size:1px; line-height:1px;">&nbsp;</td>' +
           '<td width="364" valign="top" style="width:364px;">' + content + "</td>" +
           "</tr></table>";
